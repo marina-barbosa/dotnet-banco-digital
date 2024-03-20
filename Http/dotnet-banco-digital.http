@@ -9,17 +9,10 @@ content-type: application/json
 {
   "id": 9,
   "nome": "string",
-  "email": "usuario666@email.com",
-  "cpf": "25215311556",
+  "email": "usuariq666@email.com",
+  "cpf": "20015311556",
   "senha": "string"
 }
-###
-
-
-
-###
-GET {{URL}}/v1/usuario/4
-Accept: application/json
 ###
 
 
@@ -33,4 +26,14 @@ content-type: application/json
   "senha": "string"
 }
 ###
+
+
+
+###
+GET {{URL}}/v1/usuario/12
+Accept: application/json
+###
+
+
+
 

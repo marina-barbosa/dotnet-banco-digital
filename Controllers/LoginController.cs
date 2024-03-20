@@ -1,16 +1,20 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("v1/usuario/login")]
 public class LoginController : ControllerBase
 {
-    // Supondo que você tenha um serviço de autenticação injetado
     private readonly IAutenticacaoService _autenticacaoService;
+    private readonly IConfiguration _appSettings;
 
-    public LoginController(IAutenticacaoService autenticacaoService)
+    public LoginController(IAutenticacaoService autenticacaoService, IConfiguration appSettings)
     {
         _autenticacaoService = autenticacaoService;
+        _appSettings = appSettings;
     }
 
     [HttpPost]
@@ -23,8 +27,29 @@ public class LoginController : ControllerBase
             return Unauthorized("CPF e/ou senha incorretos.");
         }
 
-        // lembrar de gerar um token JWT pra retornar na resposta
+        var token = CreateToken(usuario);
 
-        return Ok(new { message = "Login bem-sucedido." });
+        return Ok(new { message = "Login bem-sucedido.", token = token });
+    }
+
+
+    private string CreateToken(Usuario usuario)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_appSettings["Jwt:Key"]);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+            }),
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            Issuer = _appSettings["Jwt:Issuer"],
+            Audience = _appSettings["Jwt:Audience"]
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 }
