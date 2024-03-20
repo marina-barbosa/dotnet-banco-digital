@@ -1,0 +1,36 @@
+@URL = http://localhost:5216
+
+
+
+###
+POST {{URL}}/v1/usuario/cadastro
+content-type: application/json
+
+{
+  "id": 9,
+  "nome": "string",
+  "email": "usuario666@email.com",
+  "cpf": "25215311556",
+  "senha": "string"
+}
+###
+
+
+
+###
+GET {{URL}}/v1/usuario/4
+Accept: application/json
+###
+
+
+
+###
+POST {{URL}}/v1/usuario/login
+content-type: application/json
+
+{
+  "cpf": "90077570556",
+  "senha": "string"
+}
+###
+

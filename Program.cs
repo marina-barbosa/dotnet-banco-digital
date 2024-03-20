@@ -12,6 +12,9 @@ builder.Services.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));
 
+// experimentando adicionar serviço de autenticação
+builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
