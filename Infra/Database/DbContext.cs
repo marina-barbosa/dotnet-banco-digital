@@ -17,5 +17,9 @@ public class AppDbContext : DbContext
             .HasIndex(usuario => usuario.Cpf)
             .IsUnique();
 
+        modelBuilder.Entity<Usuario>()
+            .Property(usuario => usuario.Saldo)
+            .HasDefaultValue(0);
+
     }
 }

@@ -18,4 +18,6 @@ public class Usuario : Entity
 
     [Required]
     public string Senha { get; set; }
+
+    public decimal Saldo { get; set; }
 }
