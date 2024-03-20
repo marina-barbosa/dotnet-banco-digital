@@ -1,6 +1,27 @@
 @URL = http://localhost:5216
 
-GET {{URL}}/register/
+
+
+###
+
+GET {{URL}}/v1/usuario/4
 Accept: application/json
+
+###
+
+
+
+
+
+POST {{URL}}/v1/usuario/cadastro
+content-type: application/json
+
+{
+  "id": 0,
+  "nome": "string",
+  "email": "usuario3@email.com",
+  "cpf": "25215311551",
+  "senha": "string"
+}
 
 ###
