@@ -1,0 +1,6 @@
+@dotnet_banco_digital_HostAddress = http://localhost:5216
+
+GET {{dotnet_banco_digital_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
