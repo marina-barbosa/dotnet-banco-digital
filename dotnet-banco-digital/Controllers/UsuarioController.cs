@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -40,6 +39,8 @@ public class UsuariosController : ControllerBase
         // {
         //     return Conflict("CPF já cadastrado.");
         // }
+
+        novoUsuario.Senha = BCrypt.Net.BCrypt.HashPassword(novoUsuario.Senha);
 
         try
         {

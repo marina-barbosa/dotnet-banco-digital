@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "E6qUjtpePKC6XUWS6ECmYbwN0k3rjTyjdM2Lvw69jVO7ESz5FocXB4ihT+GkITmueMqzffTK3vHo/w9+l4SqoQ==",
+  "dgSpecHash": "jpuogpI9X7HbNesdCL4515RIFk/I6q9lax451dBjrwswod8u17DmkfAURC3mg5Ii5rLYWmVU16DhofGuwsbQgg==",
   "success": true,
   "projectFilePath": "D:\\Develop\\Projetos\\dotnet-banco-digital\\dotnet-banco-digital\\dotnet-banco-digital.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Marina\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
+    "C:\\Users\\Marina\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Marina\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Marina\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.3\\microsoft.aspnetcore.openapi.8.0.3.nupkg.sha512",
     "C:\\Users\\Marina\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
