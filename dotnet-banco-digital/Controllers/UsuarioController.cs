@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 
 namespace dotnet_banco_digital.Controllers;
@@ -23,20 +24,46 @@ public class UsuariosController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var emailExistente = await _context.Usuarios.AnyAsync(usuario => usuario.Email == novoUsuario.Email);
-        if (emailExistente)
+        if (novoUsuario.Id != 0)
         {
-            return Conflict("Email já cadastrado.");
+            return BadRequest("O ID deve ser 0 para novos usuários.");
         }
 
-        var cpfExistente = await _context.Usuarios.AnyAsync(usuario => usuario.Cpf == novoUsuario.Cpf);
-        if (cpfExistente)
-        {
-            return Conflict("CPF já cadastrado.");
-        }
+        // var emailExistente = await _context.Usuarios.AnyAsync(usuario => usuario.Email == novoUsuario.Email);
+        // if (emailExistente)
+        // {
+        //     return Conflict("Email já cadastrado.");
+        // }
 
-        _context.Usuarios.Add(novoUsuario);
-        await _context.SaveChangesAsync();
+        // var cpfExistente = await _context.Usuarios.AnyAsync(usuario => usuario.Cpf == novoUsuario.Cpf);
+        // if (cpfExistente)
+        // {
+        //     return Conflict("CPF já cadastrado.");
+        // }
+
+        try
+        {
+            _context.Usuarios.Add(novoUsuario);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when ((ex.InnerException as PostgresException)?.SqlState == "23505")
+        {
+            var errorMessage = ex.InnerException.Message;
+            if (errorMessage.Contains("IX_Usuarios_Email"))
+            {
+                return Conflict("Email já cadastrado.");
+            }
+
+            if (errorMessage.Contains("IX_Usuarios_Cpf"))
+            {
+                return Conflict("CPF já cadastrado.");
+            }
+        }
+        catch (DbUpdateException ex)
+        {
+
+            return StatusCode(500, "Erro interno do servidor.");
+        }
 
         return CreatedAtAction("GetUsuario", new { id = novoUsuario.Id }, novoUsuario);
     }

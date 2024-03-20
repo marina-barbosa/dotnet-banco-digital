@@ -17,10 +17,10 @@ POST {{URL}}/v1/usuario/cadastro
 content-type: application/json
 
 {
-  "id": 0,
+  "id": 9,
   "nome": "string",
-  "email": "usuario3@email.com",
-  "cpf": "25215311551",
+  "email": "usuario666@email.com",
+  "cpf": "25215311556",
   "senha": "string"
 }
 
