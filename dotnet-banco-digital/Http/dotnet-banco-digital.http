@@ -1,0 +1,6 @@
+@URL = http://localhost:5216
+
+GET {{URL}}/register/
+Accept: application/json
+
+###
