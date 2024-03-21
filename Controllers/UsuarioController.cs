@@ -159,4 +159,36 @@ public class UsuariosController : ControllerBase
         return Ok(new { message = "Saque realizado com sucesso.", novoSaldo = usuario.Saldo });
     }
 
+
+    [HttpGet("usuario/{usuarioId}/transacao/{transacaoId}")]
+    public async Task<ActionResult<Transacao>> GetByIdTransacao(int usuarioId, int transacaoId)
+    {
+        var transacao = await _context.Transacoes
+            .Where(t => (t.UsuarioOrigemId == usuarioId || t.UsuarioDestinoId == usuarioId) && t.Id == transacaoId)
+            .FirstOrDefaultAsync();
+
+        if (transacao == null)
+        {
+            return NotFound("Transação não encontrada para o usuário especificado.");
+        }
+
+        return transacao;
+    }
+
+    [HttpGet("transacoes/{id}")]
+    public async Task<ActionResult<IEnumerable<Transacao>>> GetAllTransacoes(int id)
+    {
+        var transacoes = await _context.Transacoes
+            .Where(t => t.UsuarioOrigemId == id || t.UsuarioDestinoId == id)
+            .ToListAsync();
+
+        if (!transacoes.Any())
+        {
+            return NotFound("Nenhuma transação encontrada para o usuário especificado.");
+        }
+
+        return transacoes;
+    }
+
+
 }
