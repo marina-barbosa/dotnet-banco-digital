@@ -10,11 +10,13 @@ public class LoginController : ControllerBase
 {
     private readonly IAutenticacaoService _autenticacaoService;
     private readonly IConfiguration _appSettings;
+    private readonly AppDbContext _context;
 
-    public LoginController(IAutenticacaoService autenticacaoService, IConfiguration appSettings)
+    public LoginController(IAutenticacaoService autenticacaoService, IConfiguration appSettings, AppDbContext context)
     {
         _autenticacaoService = autenticacaoService;
         _appSettings = appSettings;
+        _context = context;
     }
 
     [HttpPost]
@@ -52,4 +54,5 @@ public class LoginController : ControllerBase
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+
 }

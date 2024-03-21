@@ -9,10 +9,13 @@ namespace dotnet_banco_digital.Controllers;
 public class UsuariosController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IAutenticacaoService _autenticacaoService;
 
-    public UsuariosController(AppDbContext context)
+
+    public UsuariosController(AppDbContext context, IAutenticacaoService autenticacaoService)
     {
         _context = context;
+        _autenticacaoService = autenticacaoService;
     }
 
     [HttpPost("cadastro")]
@@ -78,6 +81,82 @@ public class UsuariosController : ControllerBase
             return NotFound();
         }
         return usuario;
+    }
+
+
+    [HttpPut("atualizar/{id}")]
+    public async Task<IActionResult> AtualizarUsuario(int id, [FromBody] Usuario usuarioAtualizado)
+    {
+        var usuario = await _context.Usuarios.FindAsync(id);
+        if (usuario == null)
+        {
+            return NotFound("Usuário não encontrado.");
+        }
+
+        usuario.Nome = usuarioAtualizado.Nome;
+        usuario.Email = usuarioAtualizado.Email;
+        usuario.Cpf = usuarioAtualizado.Cpf;
+        usuario.Senha = usuarioAtualizado.Senha;
+        usuario.Saldo = usuarioAtualizado.Saldo;
+
+        _context.Usuarios.Update(usuario);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Usuário atualizado com sucesso." });
+    }
+
+
+    [HttpGet("saldo/{id}")]
+    public async Task<IActionResult> ConsultarSaldo(int id)
+    {
+        var usuario = await _context.Usuarios.FindAsync(id);
+        if (usuario == null)
+        {
+            return NotFound("Usuário não encontrado.");
+        }
+
+        return Ok(new { saldo = usuario.Saldo });
+    }
+
+
+    [HttpPatch("deposito/{id}")]
+    public async Task<IActionResult> RealizarDeposito(int id, [FromBody] decimal valorDeposito)
+    {
+        var usuario = await _context.Usuarios.FindAsync(id);
+        if (usuario == null)
+        {
+            return NotFound("Usuário não encontrado.");
+        }
+
+        usuario.Saldo += valorDeposito;
+
+        _context.Usuarios.Update(usuario);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Depósito realizado com sucesso.", novoSaldo = usuario.Saldo });
+    }
+
+
+    [HttpPatch("saque/{id}")]
+    public async Task<IActionResult> RealizarSaque(int id, [FromBody] decimal valorSaque)
+    {
+        var usuario = await _context.Usuarios.FindAsync(id);
+        if (usuario == null)
+        {
+            return NotFound("Usuário não encontrado.");
+        }
+
+        if (usuario.Saldo < valorSaque)
+        {
+            return BadRequest("Saldo insuficiente para realizar o saque.");
+        }
+
+        usuario.Saldo -= valorSaque;
+
+        _context.Usuarios.Update(usuario);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Saque realizado com sucesso.", novoSaldo = usuario.Saldo });
     }
 
 }

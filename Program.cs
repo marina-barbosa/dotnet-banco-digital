@@ -15,6 +15,9 @@ builder.Services.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));
 
+// experimentando acessar o HttpContext atual, que contém informações sobre o usuário autenticado
+builder.Services.AddHttpContextAccessor();
+
 // experimentando adicionar serviço de autenticação
 builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
